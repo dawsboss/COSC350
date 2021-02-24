@@ -2,6 +2,10 @@
 
 echo "Give absolute path to the file's directory (Don't forget the '/' at the end): "
 read dir
+if [ ${dir:0:1} == '~' ];then
+	dir="${HOME}/${dir:2}"
+fi
+
 if ! [ -d "$dir" ];then
 	echo "Invalid file path"
 	exit 1 # Failed exit - Not valid path
@@ -34,9 +38,9 @@ if ! [ -r $"$file" ];then
 fi
 
 if ! [ -z "$(grep $word "$file")" ];then
-	echo "Noice"
+	echo "FOUND $word in $file"
 else
-	echo "NOT FOUND"
+	echo "NOT FOUND $word in $file"
 	exit 4 # Failed exit - word not found
 fi
 exit 0 # Succesful exit
