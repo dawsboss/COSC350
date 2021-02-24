@@ -49,14 +49,24 @@ int main (int argc, char** argv){
     int done = 0;
     int i; // Itter for inner for loop
     int num;
-    char strBuff[3];
+    char strBuff[4];
+    strBuff[0]=' ';
     while((readOutput=read(in, buf, BUFF) > 0)){
          num = *buf - '\0';
-         for(i=2; i>=0; i--){
+         for(i=3; i>=1; i--){
              strBuff[i] = (num%10) + '0';
              num/=10;
          }
-         if(write(out, strBuff, 3) == -1){
+         /*num = (*buf-'\0');
+         if(num<=32 || num>126){
+             char space[1];
+             space[0] = ' ';             
+             if(write(out, space, 1) == -1){
+                printf("Writing error in file!\n");
+                return 3;
+             }
+         }else*/
+         if(write(out, strBuff, 4) == -1){
              printf("Writing error in file!\n");
              return 3;
          }
