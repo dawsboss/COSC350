@@ -7,6 +7,12 @@
 
 #define BUFF 1
 
+
+/**************************************************
+ Convert integer to string    
+ Params: x is the int to be converted,
+ str is the string into which to writeReturns: length of the string
+**************************************************/
 int convIntToStr(char* str, int x){
     sprintf(str, "%d", x);
     return (strlen(str));
