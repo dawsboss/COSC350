@@ -53,7 +53,7 @@ int main (int argc, char** argv){
             num+=(buf[i] - '0');
         }
         strBuff[0]=(char)num;
-        printf("num: %d | char: %c\n", num, strBuff[0]);
+        //printf("num: %d | char: %c\n", num, strBuff[0]);
         if(write(out, strBuff, 1) == -1){
             printf("Writing error in file!\n");
             return 3;
