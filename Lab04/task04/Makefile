@@ -3,4 +3,4 @@ task4: task4.o
 task4.o: task4.c
 	gcc -c task4.c
 clean:
-	rm *.o task4
+	rm *.o task4 Dir1 Dir2 -r

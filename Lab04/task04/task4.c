@@ -3,79 +3,61 @@
 #include<unistd.h>
 #include<fcntl.h>
 #include<sys/stat.h>
-
+#include<sys/types.h>
+#include<string.h>
 
 #define BUFF 1
 
-int palind(int fd1, int fd2){
-    char buf1[BUFF];
-    char buf2[BUFF];
-    //Make sure the files start where the need to be
-    lseek(fd1, 0, SEEK_SET);
-    lseek(fd2, -3, SEEK_END);
-    int read1;
-    int read2;
-    int i=0;
-    do{
-        lseek(fd1, i, SEEK_SET);
-        read1=read(fd1, buf1, BUFF);
-
-        if(i==0){
-            lseek(fd2, -2, SEEK_END);
-        }else{
-            lseek(fd2, (i+2)*-1, SEEK_END);
-        }
-        read2=read(fd2, buf2, BUFF);
-        
-        
-        if(read1==-1 || read2==-2){
-            return 0;
-        }
-        i++;
-        if(buf1[0]=='\n'){
-            break;
-        }
-        printf("buf1[0]: %c | buf2[0]: %c\n", buf1[0], buf2[0]);
-        if(buf1[0]!=buf2[0]){
-            return 0;
-        }
-    }while(read1>0 && read2>0);
-    /*while(( (read1=read(fd1, buf1, BUFF)) > 0 ) && ( (read2=read(fd2, buf2, BUFF)) > 0 )){
-        printf("buf1[0]: %c | buf2[0]: %c\n", buf1[0], buf2[0]);
-        if(buf1[0]!=buf2[0]){
-            //return 0;
-        }
-        //lseek(fd2, -2, SEEK_CUR);
-    }*/
-    return 1;
-}
-
-
-
 int main(int argc, char** argv){
-    if(argc==1){
-        printf("Need one file input!\n");
-        return 1;
-    }else if(argc>2){
-        printf("No more than one file input!\n");
-        return 1;
-    }
     
-    int in = open(argv[1], O_RDONLY);
-    if(in == -1){
-        printf("Error oppening file!\n");
-        return 2;
-    }
-    int inCopy = dup(in);
+    int len = (strlen(getenv("HOME")) + 1);
+    char* home = malloc(len*sizeof(char));
+    char* dir1 = malloc(len+5);
+    char* dir2 = malloc(len+5);
+    char* dir12 = malloc(len+10);
+    char* helloCpy = malloc(len+10+6);
 
-    if(palind(in, inCopy)==1){
-        printf("File contains a palindrome!\n");
-        return 0;
-    }else{
-        printf("File does NOT contain a palindrome!\n");
-        return 0;
+    strcpy(home, getenv("HOME"));
+    strcpy(dir1, home);
+    strcpy(dir2, home);
+    strcpy(dir12, home);
+
+    strcat(dir1, "/Dir1");
+    strcat(dir2, "/Dir2");
+    strcat(dir12, "/Dir2/Dir12");
+    strcpy(helloCpy, dir12);
+    strcat(helloCpy, "/hello");
+
+    printf("home: %s\ndir1: %s\ndir2: %s\ndir12: %s\n",home, dir1, dir2, dir12);
+    if( (mkdir(dir1, 0775) > 0)||(mkdir(dir2, 0775))||(mkdir(dir12, 0775))){
+        printf("Error creating dir\n");
+        return 1;
     }
-    
-    
+
+    int cpy = open(helloCpy, O_WRONLY|O_CREAT, 0777);
+    if(cpy==-1){
+        printf("Error opening out file\n");
+        return 1;
+    }
+    int in = open("hello", O_RDONLY);
+    if(in == -1){
+        printf("Error opening in file\n");
+        return 1;
+    }
+    int readOut;
+    char buf[BUFF];
+    while((readOut=read(in, buf, BUFF)) > 0){
+        if(write(cpy, buf, readOut) == -1){
+            printf("Error writing\n");
+            return 1;
+        }
+    }
+    if(readOut==-1){
+        printf("Error reading\n");
+        return 1;
+    }
+
+
+    close(cpy);
     return 0;
 }
