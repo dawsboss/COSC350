@@ -3,7 +3,7 @@
 #include<unistd.h>
 #include<fcntl.h>
 #include<sys/stat.h>
-
+#include<string.h>
 
 #define BUFF 1
 #define numBUFF 80
@@ -30,20 +30,9 @@ int str_to_int(char* string){//Returns -1 if error
     return rtn;
 }
 
-char* int_to_str(int num){
-		int j=num;
-		int size=0;
-		while(j>0){
-			  size++;
-				j/=10;
-		}
-
-		char *rtn = malloc(size+1);
-		for(j=size-1; j>=0; j--){
-				rtn[j] = (num%10) + '0';
-				num/=10;
-		}
-		return rtn;
+int int_to_str(char* str, int num){
+    sprintf(str, "%d", num);
+    return strlen(str);
 }
 
 int main(int argc, char** argv){
@@ -66,13 +55,22 @@ int main(int argc, char** argv){
 		int readOutput;//hold file reading
 		int num=0;//hold end number
 		int i=0;//Hold what digit the number is
-
+    int j=0;
+    int isNum = 0;
 		while((readOutput=read(in, buf, BUFF)) > 0){
-				if(buf[0]>='0' && buf[0]<='9'){
+        if(j>80)
+            break;
+        j++;
+        if(buf[0]>='0' && buf[0]<='9'){
 						cnum[i]=buf[0];
 						i++;
+            isNum=1;
 				}
 		}
+    if(isNum==0){
+        printf("No number in file!\n");
+        return 1;
+    }
 		num = str_to_int(cnum);
 		num+=10;
 		
@@ -81,15 +79,17 @@ int main(int argc, char** argv){
 				printf("Reading error!\n");
 				return 4;
 		}
-		int temp=num;
-		int size=0;
-		while(temp>0){
-				size++;
-				temp/=10;
-		}
-		char* rtn = int_to_str(num);
-		write(1, rtn, size);
-		printf("\n");
-		free(rtn);
+
+    int temp = num;
+    int ree=0;
+    while(temp>0){
+        temp/=10;
+        ree++;
+    }
+    char* rtn = malloc(ree);
+    int size = int_to_str(rtn, num);
+    write(1, rtn, ree);
+    printf("\n");
+    free(rtn);
     return 0;
 }
