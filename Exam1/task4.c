@@ -61,22 +61,22 @@ int main(int argc, char** argv){
 			  printf("Error oppening file!i First argument should be the input! \n");
 				return 2;
 		}
-		int alpha = open(argv[2], O_WRONLY|O_CREAT, 0666);
+		int alpha = open(argv[2], O_RDWR|O_CREAT, 0666);
 		if(in == -1){
 			  printf("Error opening file! \n");
 				return 2;
 		}
-		int num = open(argv[3], O_WRONLY|O_CREAT, 0666);
+		int num = open(argv[3], O_RDWR|O_CREAT, 0666);
 		if(in == -1){
 			  printf("Error opening file! \n");
 				return 2;
 		}
-		int other = open(argv[4],  O_WRONLY|O_CREAT, 0666);
+		int other = open(argv[4],  O_RDWR|O_CREAT, 0666);
 		if(in == -1){
 			  printf("Error opening file! \n");
 				return 2;
 		}
-		int copy = open(argv[5], O_WRONLY|O_CREAT, 0666);
+		int copy = open(argv[5], O_RDWR|O_CREAT, 0666);
 		if(in == -1){
 			  printf("Error opening file! \n");
 				return 2;
@@ -157,11 +157,11 @@ int main(int argc, char** argv){
 		}
     
 		int i,j,k;
-		char buffer1[size];
-		char buffer2[size];
-		char buffer3[size];
-  	
-		close(alpha);
+		char* buffer1 = malloc(size);
+		char* buffer2 = malloc(size);
+		char* buffer3 = malloc(size);
+
+		/*close(alpha);
 		close(other);
 		close(num);
 		
@@ -179,7 +179,19 @@ int main(int argc, char** argv){
 		if(in == -1){
 			  printf("Error opening file! \n");
 				return 2;
-		}
+		}*/
+    if(lseek(alpha, 0, SEEK_SET) == -1){
+        printf("Error lseeking back to begining\n");
+        return 1;
+    }
+    if(lseek(num, 0, SEEK_SET) == -1){
+        printf("Error lseeking back to begining\n");
+        return 1;
+    }
+    if(lseek(other, 0, SEEK_SET) == -1){
+        printf("Error lseeking back to begining\n");
+        return 1;
+    }
 
 		i=read(alpha, buffer1, size);
 		j=read(num, buffer2, size);

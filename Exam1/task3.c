@@ -62,7 +62,7 @@ int main(int argc, char** argv){
     }
 
     char buf[BUFF];//for reading
-    char cnum[numBUFF];//For the possible number
+    char cnum[numBUFF+1];//For the possible number
     int readOutput;//hold file reading
     int num=0;//hold end number
     int i=0;//Hold what digit the number is
@@ -70,7 +70,7 @@ int main(int argc, char** argv){
     int j=0;
     int isNum = 0;
     while((readOutput=read(in, buf, BUFF)) > 0){
-            if(j>=80){
+            if(j>=79){
                 break;
             }
             j++;
@@ -80,10 +80,14 @@ int main(int argc, char** argv){
                     isNum=1;
             }
     }
-    if(isNum==0){
+    if(isNum==0 && j==79){
+        printf("No number in file in the first 80 char!\n");
+        return 1;
+    }else if(isNum==0){
         printf("No number in file!\n");
         return 1;
     }
+    cnum[i]='\0';
     num = str_to_int(cnum);
     num+=100;
 
