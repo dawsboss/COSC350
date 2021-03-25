@@ -69,7 +69,7 @@ int main(int argc, char** argv){
         n=str_to_int(argv[2]);
         sleepT=str_to_int(argv[4]);
         for(; n>0; n--){
-            printf("This is the parent | ID: %d\n", pid);
+            printf("This is the parent | ID: %d\n", getpid());
             sleep(sleepT);
         }
         break;
@@ -84,7 +84,7 @@ int main(int argc, char** argv){
 
         printf("Child has finished: PID = %d\n", child_pid);
         if(WIFEXITED(stat_val))
-            printf("Child exited with code %d\n", WIFEXITED(stat_val));
+            printf("Child exited with code %d\n", WEXITSTATUS(stat_val));
         else
             printf("Child terminated adnormally\n");
     }

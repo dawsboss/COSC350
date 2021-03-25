@@ -1,1 +1,136 @@
-dokvnkso  ojbnobj b  objbno    onl;kn
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/types.h>
+#include<unistd.h>
+#include<sys/wait.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+
+#define BUFF  
+
+/*
+ * This code differs from task  because not parent will wait
+ * for the child to finish executing bfefore terminating it's
+ * self. This makes sure that the child terminates and also in
+ * this case fixed the bug where the child would print over
+ * the user's console
+*/
+
+
+int main(int argc, char** argv){
+    //argv[i]
+    // : File name/location
+    if(argc!= ){
+        printf("Need one argument, file name\n");
+        return  ;
+    }
+
+    pid_t pid;
+
+    //Open the file for both child and parent
+    int openDes = open(argv[ ], O_RDONLY);
+    if(openDes == - ){
+        printf("Error opening given file\n");
+        return  ;
+    }
+    char buf[BUFF];
+    int cOffset =  ;
+    int pOffset =  ;
+    int in;
+    char space[ ];
+    space[ ] = ' ';
+
+    pid = fork();
+    switch(pid)
+    {
+    case - :
+        printf("Fork failed\n");
+        exit( );
+    case  ://This is the child code
+        ;//C is buggy
+
+        int childTXT = open("child.txt", O_WRONLY | O_CREAT,     );
+        if(childTXT == - ){
+            printf("Error opening child.txt\n");
+            _exit( );
+        }
+        while((in = pread(openDes, buf, BUFF, cOffset))> ){
+            if(in == - ){
+                printf("Error reading in child\n");
+                _exit( );
+            }
+            cOffset++;
+            if(buf[ ]<' ' || buf[ ]>' '){
+                if(write(childTXT, buf, BUFF) == - ){
+                    printf("Error writing in child\n");
+                   _exit( );
+                }
+            }else if(buf[ ] == '\n'){
+                if(write(childTXT, buf, BUFF) == - ){
+                    printf("Error writing in child new line\n");
+                    _exit( );
+                }
+            }else{
+                if(write(childTXT, space,  ) == - ){
+                    printf("Error writing in child space\n");
+                   _exit( );
+                }
+            }
+        }
+
+        _exit( );
+    default://This is the parent code
+        ;//c blows, delceration isn;t statment
+
+        int parentTXT = open("parent.txt",O_WRONLY | O_CREAT,     );
+        if(parentTXT == - ){
+            printf("Error opening parent.txt\n");
+            return  ;
+        }
+
+        while((in=pread(openDes, buf, BUFF, pOffset))> ){
+            if(in == - ){
+                printf("Error reading in parent\n");
+                return  ;
+            }
+            pOffset++;
+            if(buf[ ]>' ' && buf[ ]<' '){
+                if(write(parentTXT, buf, BUFF) == - ){
+                    printf("Error writing in parent\n");
+                    return  ;
+                }
+            }else if(buf[ ] == '\n'){
+                if(write(parentTXT, buf, BUFF) == - ){
+                    printf("Error writing in parent new line\n");
+                    return  ;
+                }
+            }else{
+                if(write(parentTXT, space,  ) == - ){
+                    printf("Error writing in parent space\n");
+                    return  ;
+                }
+            }
+        }
+
+        break;
+    }
+    
+    //added to wait
+    /*if(pid !=  ){
+        int stat_val;
+        pid_t child_pid;
+        
+        child_pid = wait(&stat_val);
+
+        printf("Child has finished: PID = %d\n", child_pid);
+        if(WIFEXITED(stat_val))
+            printf("Child exited with code %d\n", WIFEXITED(stat_val));
+        else
+            printf("Child terminated adnormally");
+
+    }*/
+    
+    
+    exit( );
+
+}

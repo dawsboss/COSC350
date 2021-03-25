@@ -9,7 +9,12 @@
  * for the child to finish executing bfefore terminating it's
  * self. This makes sure that the child terminates and also in
  * this case fixed the bug where the child would print over
- * the user's console
+ * the user's console. The large case we had to look out for
+ * is 5351 and that is where the child ran over in task2 and
+ * continued printing after the parent finsihed/when the
+ * user received control of the comand line again. Here the
+ * parent process waits for the child to finish so when the 
+ * user recieves control back.
 */
 
 int str_to_int(char* num){
