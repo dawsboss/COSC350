@@ -27,10 +27,10 @@ char* mygetenv(char** envp, char* desiredEnv){//returns -1 if error
 
 
 int main(int argc, char** argv, char** envp){
-    if(argc!=2){
+    /*if(argc!=2){
         printf("./task1 {enviroment variables / \"environ\"}\n");
         return 1;
-    }
+    }*/
     if(envp == NULL){
         printf("envp paraemeter was given empty\n");
         return 2;

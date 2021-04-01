@@ -89,7 +89,7 @@ int main(int argc, char** argv){
 
     printf("Child has finished: PID = %d\n", child_pid);
     if(WIFEXITED(stat_val))
-        printf("Child exited with code %d\n", WIFEXITED(stat_val));
+        printf("Child exited with code %d\n", WEXITSTATUS(stat_val));
     else
         printf("Child terminated adnormally");
 
