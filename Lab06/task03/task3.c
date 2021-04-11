@@ -12,16 +12,16 @@ int main(){
 
     pid = fork();
     if(pid == 0){//child
-        printf("pid: %d | getpid: %d | getppid: %d\n", pid, getpid(), getppid());
+//        printf("pid: %d | getpid: %d | getppid: %d\n", pid, getpid(), getppid());
         
         umask(0);
         int out = open("foo", O_WRONLY|O_CREAT, 0666);
         char* message = "Hi mom";
         write(out, message, strlen(message));
         
-        printf("pid: %d | getpid: %d | getppid: %d\n", pid, getpid(), getppid());
+//        printf("pid: %d | getpid: %d | getppid: %d\n", pid, getpid(), getppid());
     }else{//parrent
-        printf("pid: %d | getpid: %d\n", pid, getpid());
+//        printf("pid: %d | getpid: %d\n", pid, getpid());
         int status;
         wait(&status);
         int in = open("foo", O_RDONLY);
@@ -30,7 +30,7 @@ int main(){
         message[0] = '\0';
         char buf[1];
         while(read(in, buf, 1) > 0){
-            printf("buff: %c | message: %s\n", buf[0], message);
+//            printf("buff: %c | message: %s\n", buf[0], message);
             char* tmp = malloc(len);
             strcpy(tmp, message);
             free(message);
@@ -41,7 +41,7 @@ int main(){
         }
         printf("My son said, %s\n", message);
 
-        printf("pid: %d | getpid: %d\n", pid, getpid());
+//        printf("pid: %d | getpid: %d\n", pid, getpid());
     }
     exit(0);
 
