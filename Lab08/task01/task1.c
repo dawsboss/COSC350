@@ -3,6 +3,11 @@
 #include<stdio.h>
 #include<string.h>
 
+/*
+ *  If you switch the read and write the program will wait 
+ *  forever because it si waiting to read and no one is writing
+ */ 
+
 #define READ_END 0
 #define WRITE_END 1
 
